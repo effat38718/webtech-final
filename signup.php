@@ -51,9 +51,9 @@ include "config.php";
             $password = test_input($password);
             $position = test_input($position);
 
-            $data = array("username" => $userName, "password" => $password, "position" => $position);
-            $data_encode = json_encode($data);
-            $result1 = write($data_encode);
+            //$data = array("username" => $userName, "password" => $password, "position" => $position);
+            //$data_encode = json_encode($data);
+            $result1 = register($userName, $position, $password);
             if ($result1) {
                 $successMessage = "Signup Successfully.";
             } else {
@@ -79,7 +79,7 @@ include "config.php";
     }
     ?>
 
-    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" name="signup">
         <label for="userName">Username<span style="color : red;">* </span>:</label>
         <input type="text" id="userName" name="userName">
         <span style="color : red;"><?php echo $userNameErr; ?></span> <br> <br>
@@ -99,8 +99,7 @@ include "config.php";
 
         <span style="color : red;"><?php echo $passwordErr; ?></span> <br> <br>
 
-        <button class="pure-material-button-contained" type="button" id="myBtn">VALIDATE </button>
-        <input class="register_button" type="submit" value="SIGN UP">
+        <button class="pure-material-button-contained" type="submit" id="myBtn">SIGN UP </button>
     </form>
     <span style="color : green"><?php echo $successMessage; ?> </span>
     <span style="color : red"><?php echo $errorMessage; ?> </span>

@@ -1,77 +1,73 @@
 <?php
 include "config.php";
-
-define("filepath", "user-info.json");
-
-$username = $password = "";
-$isValid = true;
-$usernameErr = $passwordErr = "";
-$uid = "";
-
 require 'DbRead.php';
 
-if (isset($_COOKIE['uid'])) {
-    $uid = $_COOKIE['uid'];
-}
+//define("filepath", "user-info.json");
 
+$useName = $password =  "";
+$userNameErr = $passwordErr =  "";
+$successMessage = $errorMessage = "";
+$flag = false;
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-    $username = $_POST['username'];
+    $userName = $_POST['userName'];
     $password = $_POST['password'];
-    $isValid = true;
 
 
-    if (empty($username)) {
-        $usernameErr = "Username can not be empty!";
-        $isValid = false;
+    if (empty($userName)) {
+        $userNameErr = "User name cannot be empty!";
+        $flag = true;
     }
-
     if (empty($password)) {
-        $passwordErr = "Password can not be empty!";
-        $isValid = false;
+        $passwordErr = "password cannot be empty!";
+        $flag = true;
     }
 
-    if ($isValid) {
-
-        $user_data = read();
-        $user_data_array_decode = json_decode($user_data);
-        $found = false;
-        for ($i = 0; $i < count($user_data_array_decode); $i++) {
-            if ($username === $user_data_array_decode[$i]->username && $password === $user_data_array_decode[$i]->password) {
-                $found = true;
-                break;
-            }
+    if (!$flag) {
+        if (strlen($userName) > 10) {
+            $userNameErr = "Username cannot be more than 10 characters!";
+            $flag = true;
         }
+        if (strlen($password) > 8) {
+            $passwordErr = "password cannot be more than 8 characters!";
+            $flag = true;
+        }
+        if (!$flag) {
+            $userName = test_input($userName);
+            $password = test_input($password);
 
-        if ($found) {
-            echo '<span style="color:green;">Log In Successfull!</span>';
+            // $data = array("username" => $userName, "password" => $password, "position" => $position);
+            // $data_encode = json_encode($data);
+            $result1 = login($userName, $password); //write($data_encode);
+            //$row = mysqli_fetch_array($result);
 
-            if (isset($_POST['rememberme'])) {
-
-                setcookie("uid", $username, time() + 60 * 60 * 24 * 30);
+            if (strcmp($result1, $password) == 0) {
+                $errorMessage = "login successful";
+                //session_start();
+                //$_SESSION['userName'] = $userName;
+                header("Location: Home.php");
+            } else {
+                $errorMessage = "Login failed.....!";
+                echo ($errorMessage);
             }
-
-            session_start();
-            $_SESSION['uid'] = $username;
-
-            header("Location: Home.php");
-        } else {
-            echo '<span style="color:red;">Log In failed! Invalid username or password!</span>';
         }
     }
 }
 
-function read()
+// function write($content)
+// {
+//     $resource = fopen(filepath, "a");
+//     $fw = fwrite($resource, $content . "\n");
+//     fclose($resource);
+//     return $fw;
+// }
+
+function test_input($data)
 {
-    $resource = fopen(filepath, "r");
-    $fz = filesize(filepath);
-    $fr = "";
-    if ($fz > 0) {
-        $fr = fread($resource, $fz);
-    }
-    fclose($resource);
-    return $fr;
+    $data = trim($data);
+    $data = stripcslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
 }
-
 
 
 ?>
@@ -84,18 +80,20 @@ function read()
     <?php include 'title.php' ?>
 </head>
 
+<script type="text/javascript" src="login-validation.js"></script>
+
 <body style="text-align: center;">
     <?php
     include 'php_header.php';
     ?>
 
     <h1><?php echo $CURRENT_PAGE; ?></h1>
-    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" name="login-form">
 
 
-        <label for="username">Username: </label>
-        <input type="text" id="username" name="username" value="<?php echo $uid; ?>">
-        <span style="color: red;"><?php echo $usernameErr; ?></span>
+        <label for="userName">Username: </label>
+        <input type="text" id="username" name="userName">
+        <span style="color: red;"><?php echo $userNameErr; ?></span>
         <br> <br>
 
         <label for="password">Password: </label>
@@ -108,12 +106,7 @@ function read()
         <label for="rememberme">Remember Me</label>
         <br><br>
 
-
-        <input class="submit" type="submit" value="login">
-
-
-
-
+        <button class="pure-material-button-contained" type="submit" id="myBtn">SIGN IN</button>
 
     </form>
     <br><br>

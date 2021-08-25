@@ -22,8 +22,7 @@ $userId = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
     <h1>Welcome! <?php echo $userId; ?></h1>
     <p><a href="users-list.php">View/Delete user data</a></p>
     <p><a href="passwordchange.php">Change Password</a></p>
-    <p><a href="ViewData.php">View Finance and Sale Data </a></p>
-    <p><a href="salary.php.php">Salary</a></p>
+    <p><a href="salesData.php">view sales data</a></p>
     <p><a href="ratings.php">Ratings</a></p>
 
     <?php include 'logout-include.php'; ?> <br>

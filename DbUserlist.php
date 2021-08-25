@@ -2,20 +2,19 @@
 require 'DbConnect.php';
 
 
-function login($userName, $password)
+function Userlist()
 {
     $conn = connect();
-    $sql = $conn->prepare("SELECT password FROM USERS WHERE usernaame = ?");
-    $sql->bind_param("s", $userName);
+    $sql = $conn->prepare("SELECT * FROM USERS ");
     $sql->execute();
     $res = $sql->get_result();
     // while ($row = $res->fetch_assoc()) {
     //     echo $row['password'] . "<br>";
     //     // consoleLog($row);
     // }
-    $row = $res->fetch_assoc();
+    //$row = $res->fetch_assoc();
 
-    return $row['password'];
+    return $res;
 }
 
 function consoleLog($msg)
