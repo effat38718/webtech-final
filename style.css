@@ -1,3 +1,57 @@
+html, 
+body {
+    height: 100%;
+}
+
+.userTable{
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.userTable thead tr{
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+.userTable th,
+.userTable td{
+    padding: 12px 15px;
+}
+
+.userTable tbody tr{
+    border-bottom: 1px solid #dddddd;
+}
+
+.delete_button{
+    display: inline-block;
+    box-sizing: border-box;
+    color: rgb(129, 26, 61);
+    background-color: lavender;
+    border-radius: 8px;
+}
+
+.update_button{
+    display: inline-block;
+    box-sizing: border-box;
+    color: rgb(11, 63, 77);
+    background-color: rgb(216, 216, 238);
+    border-radius: 8px;
+}
+body{
+    /* background-image: url("background_02.jpg");
+    background-repeat: no-repeat;
+    background-size: cover; */
+    background-color: #434344;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(43deg, #434344 0%, #bbb4bb 65%, #ffffff 100%);
+
+}
+
 .pure-material-button-contained {
     position: relative;
     display: inline-block;

@@ -16,6 +16,14 @@ switch ($_SERVER['SCRIPT_NAME']) {
         $CURRENT_PAGE = "User List";
         $PAGE_TITLE = "User List";
         break;
+    case '/restaurant/salesData.php':
+        $CURRENT_PAGE = "Sales Data";
+        $PAGE_TITLE = "Sales Data";
+        break;
+    case '/restaurant/ratings.php':
+        $CURRENT_PAGE = "Ratings";
+        $PAGE_TITLE = "Ratings";
+        break;
     default:
         $CURRENT_PAGE = "Home";
         $PAGE_TITLE = "Home";

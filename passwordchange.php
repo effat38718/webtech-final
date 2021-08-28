@@ -1,7 +1,10 @@
 <?php
 include "config.php";
 session_start();
-$userId = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
+$userId = isset($_SESSION['userName']) ? $_SESSION['userName'] : "";
+if ($userId === "") {
+    header("Location: login-form.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -12,18 +15,21 @@ $userId = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include 'title.php' ?>
+    <link rel="stylesheet" href="style.css">
 </head>
+<script type="text/javascript" src="passChangeForm.js"></script>
 
 <body style="text-align: center;">
 
     <?php
     include 'php_header.php';
+    require 'update_password.php';
     ?>
 
     <h1><?php echo $CURRENT_PAGE; ?></h1>
 
     <?php
-    define("filepath", "user-info.json");
+    //define("filepath", "user-info.json");
 
     $password = "";
     $passwordErr = "";
@@ -40,45 +46,9 @@ $userId = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
 
 
         if (!$flag) {
-
-
-            $user_data = read();
-            $user_data_array_decode = json_decode($user_data);
-
-            for ($i = 0; $i < count($user_data_array_decode); $i++) {
-                if ($userId === $user_data_array_decode[$i]->username) {
-                    $user_data_array_decode[$i]->password = $password;
-                    break;
-                }
-            }
-            $data_encode = json_encode($user_data_array_decode);
-            $result1 = write($data_encode);
-            if ($result1) {
-                $successMessage = "Password changed successfully.";
-            } else {
-                $errorMessage = "Error while signing up!";
-            }
+            $newPass = $_POST['password'];
+            UpdatePassword($newPass);
         }
-    }
-
-    function read()
-    {
-        $resource = fopen(filepath, "r");
-        $fz = filesize(filepath);
-        $fr = "";
-        if ($fz > 0) {
-            $fr = fread($resource, $fz);
-        }
-        fclose($resource);
-        return $fr;
-    }
-
-    function write($content)
-    {
-        $resource = fopen(filepath, "w");
-        $fw = fwrite($resource, $content . "\n");
-        fclose($resource);
-        return $fw;
     }
 
     function test_input($data)
@@ -97,11 +67,11 @@ $userId = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
 
         <span style="color : red;"><?php echo $passwordErr; ?></span> <br> <br>
 
-        <input class="register_button" type="submit" value="Confirm">
+        <input class="pure-material-button-contained" type="submit" value="Confirm">
     </form>
+    <br>
     <span style="color : green"><?php echo $successMessage; ?> </span>
     <span style="color : red"><?php echo $errorMessage; ?> </span>
-    <p><a href="Home.php">Home</a></p>
     <?php include 'logout-include.php'; ?><br>
 
     <?php

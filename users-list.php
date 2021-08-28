@@ -2,7 +2,10 @@
 include "config.php";
 require 'DbUserlist.php';
 session_start();
-$userid = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
+$userid = isset($_SESSION['userName']) ? $_SESSION['userName'] : "";
+if ($userid === "") {
+    header("Location: login-form.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -11,15 +14,9 @@ $userid = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
 <head>
     <meta charset="utf-8">
     <?php include 'title.php' ?>
-
+    <link rel="stylesheet" href="style.css">
     <style>
-        table,
-        th,
-        tr,
-        td {
-            color: #6b8e23;
-            border: 2px solid grey;
-        }
+
     </style>
 </head>
 
@@ -33,33 +30,16 @@ $userid = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
 
     <?php
     //define("filepath", "user-info.json");
-    echo "<table>";
-    echo "<tr><th>Username</th>";
-    echo "<th>Password</th>";
-    echo "<th>Position</th>";
-
-    echo "<th>Actions</th>";
-    echo "</tr>";
-
-    $result1 = Userlist();
-    foreach ($result1 as $item) {
-        echo "<tr>";
-        echo "<td>" . $item['usernaame'] . "</td>";
-        echo "<td>" . $item['position'] . "</td>";
-        echo "<td>" . $item['password'] . "</td>";
-
-
-        // echo "<td> <input type='submit' name='delete' value='DELETE USER'id ='myBtn'> </td>";
-        echo "<td> <button class='pure-material-button-contained' type='button' id='myBtn'>Delete</button> </td>";
-
-        echo "</tr>";
-        // consoleLog($row);
+    $output = makeUserListTable();
+    echo ($output);
+    function submitOnclick($userName)
+    {
+        echo ($userName);
     }
-    echo "</table>";
     ?>
     <script type="text/javascript" src="userlist.js"></script>
     <br>
-    <p><a href="Home.php">Home</a></p>
+
     <?php include 'logout-include.php'; ?><br><br>
 
     <?php

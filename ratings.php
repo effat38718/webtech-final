@@ -2,7 +2,10 @@
 include "config.php";
 require 'DbRating.php';
 session_start();
-$userid = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
+$userid = isset($_SESSION['userName']) ? $_SESSION['userName'] : "";
+if ($userid === "") {
+    header("Location: login-form.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -11,16 +14,7 @@ $userid = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
 <head>
     <meta charset="utf-8">
     <?php include 'title.php' ?>
-
-    <style>
-        table,
-        th,
-        tr,
-        td {
-            color: #6b8e23;
-            border: 2px solid grey;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -33,7 +27,7 @@ $userid = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
 
     <?php
     //define("filepath", "user-info.json");
-    echo "<table>";
+    echo "<table class = userTable>";
     echo "<tr><th>Food Name</th>";
     echo "<th>Rating</th>";
 
@@ -51,7 +45,7 @@ $userid = isset($_SESSION['uid']) ? $_SESSION['uid'] : "";
     echo "</table>";
     ?>
     <br>
-    <p><a href="Home.php">Home</a></p>
+
     <?php include 'logout-include.php'; ?><br><br>
 
     <?php

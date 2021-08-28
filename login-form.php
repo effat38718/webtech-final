@@ -8,10 +8,12 @@ $useName = $password =  "";
 $userNameErr = $passwordErr =  "";
 $successMessage = $errorMessage = "";
 $flag = false;
+
+
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $userName = $_POST['userName'];
     $password = $_POST['password'];
-
+    $rememberMeFlag = false;
 
     if (empty($userName)) {
         $userNameErr = "User name cannot be empty!";
@@ -42,15 +44,34 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
             if (strcmp($result1, $password) == 0) {
                 $errorMessage = "login successful";
-                //session_start();
-                //$_SESSION['userName'] = $userName;
-                header("Location: Home.php");
+                if ($_POST['rememberme'] === "on") {
+                    rememberUser($userName);
+                    saveUsertoSession($userName);
+                    header("Location: Home.php");
+                } else {
+                    saveUsertoSession($userName);
+                    header("Location: Home.php");
+                }
             } else {
                 $errorMessage = "Login failed.....!";
                 echo ($errorMessage);
             }
         }
     }
+}
+
+function rememberUser($username)
+{
+    $cookie_expire_time = 60 * 60;
+    $cookie_username = 'userName';
+    $cookie_value = $username;
+    setcookie($cookie_username, $cookie_value, time() + ($cookie_expire_time), "/");
+}
+
+function saveUsertoSession($username)
+{
+    session_start();
+    $_SESSION['userName'] = $username;
 }
 
 // function write($content)
@@ -81,6 +102,7 @@ function test_input($data)
 </head>
 
 <script type="text/javascript" src="login-validation.js"></script>
+
 
 <body style="text-align: center;">
     <?php
@@ -117,5 +139,13 @@ function test_input($data)
     ?>
 
 </body>
+<!-- <style>
+    body {
+        background-image: url("background_02.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style> -->
+
 
 </html>
