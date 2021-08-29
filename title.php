@@ -1,1 +1,0 @@
-<title class="title_tag"><?php echo $PAGE_TITLE ?></title>
